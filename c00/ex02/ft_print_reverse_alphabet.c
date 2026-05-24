@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_print_reverse_alphabet.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbalayan <jbalayan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbalayan <jbalayan@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/17 10:39:58 by jbalayan          #+#    #+#             */
-/*   Updated: 2026/05/17 12:57:33 by jbalayan         ###   ########.fr       */
+/*   Created: 2026/05/06 16:16:39 by jbalayan          #+#    #+#             */
+/*   Updated: 2026/05/06 20:28:23 by jbalayan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-void	check_input(char *str);
-
-int	main(int argc, char **argv)
+void	ft_print_reverse_alphabet(void)
 {
-	if (argc != 2)
+	int		counter;
+	char	m;
+
+	counter = 122;
+	while (counter >= 97)
 	{
-		write(1, "Error\n", 6);
-		return (0);
+		m = (char)counter;
+		write(1, &m, 1);
+		counter--;
 	}
-	check_input(argv[1]);
-	return (0);
 }
