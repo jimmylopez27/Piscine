@@ -1,0 +1,150 @@
+I. RUSH-02 PROGRAM FLOW
+
+STEP 1 FOCUS ON THE VALIDITY OF THE ARGUMENT PASSED WHEN RUNNING THE EXC. FILE
+
+	Step 1.1 (main.c) the first condiction in "main func"
+
+		- The argument will first pass to 2 conditions: 
+		- a) if the argc < 2 || argc > 3 return Error.
+		- b) if the argc ! not_valid_number (empty or blank) return Error.
+		- if it pass these 2 conditions, proceed to Step 2.
+
+STEP 2 FOCUS ON THE FUNCTION "validate_dict" function (this function is inside 01-file)
+
+	Step 2.1 (main.c)
+	
+		- The argument will be checked.
+		- The argument will be passed into the function "validate_dict" above the "main function".
+		- if the argc = 3 then get the av[1] which is the "numbers.dict" and saved in  a variable "file_path".
+		- if not argc = 3 the force to check the file "numbers.dict" to be assigned to "file_path".
+		- if the "file_path" is empty return NULL.
+		- if the "file_path" has successfully containts the "numbers.dict", then proceed to Step 2.2.
+
+	Step 2.2 (main.c) 
+
+		- The "file_path" will be passed into the function "read_file" (03-file).
+		- "read_file" function (03-file) returns the copy of "number.dict".
+		- It opens, reads, and saved the copy of the file "number.dict" and return the copy and saved the file as "string".  
+		- If the "file" is empty return NULL, if not empty, the file will be passed to "split_lines" function (01-file) then proceed to Step 2.3 
+		
+	Step 2.3 (main.c)
+
+		- The "file" (contains the copy of "numbers.dict") will be passed in "split_lines" function (04-file).
+		- "split_lines" function (04-file) converts all the '\n' to '\0' in the "file" string and malloc a new 2d array for each rows '\n'. 
+		- The split_lines" function (04-file) returns **arr which is a 2d array that points to the whole collections of strings (orginally numbers.dict).
+		- The return value arr will be saved into a new pointer "lines" (01-file). 
+		- if "files" is empty return NULL, if not empty, proceed to Step 2.4. 
+		
+	Step 2.4. (main.c)
+
+		- The output pointer "lines" in Step 4, will be passed into the "parse.dict" function (06-file)
+		- The "parse.dict" function (06-file) is expected to return a "struct" that contains colelctions of structs with key (number) and value (words). Both are defined as char *.
+		- Before converting the "lines"(i.e. "numbers.dict" with '\0' and pointers for each), a struct should be created first.
+		- The struct is defined with pseudo name "t_dict" in the "header file". Then malloc inside the "parse.dict" function (06-file).
+		- The total size of the struct depends on how many '\0' it can read  + 1 for the NULL struct (clue that the struct ends since ist not a string).
+		- The returned struct of the "parse.dict" function (06-file) will then be stored in the struct pointer "dict".
+		- Then that "dict" will be the returned value of the whole function "validate_dict" still inside the main.c.
+		- Then proceed to Step 3.
+	
+STEP 3 FOCUS ON "dict_get" function (this function is inside 07-file)
+
+	Step 3.1 (main.c) 
+	
+		- The "dict_get" function (07-file) function expects to compare the "number string argument" passed during the execution of the pogram to the "struct key".
+		- The "dict_get" function (07-file) has 3 params "dict", "size", "av[ac - 1]" -("the struct", "how many structs", and "the argument passed").
+		- This function only detects numbers within the key value pair. If there is (means strcmp = 0), then return the "value" corresponding to it, then proceed Step 3.2.
+		
+	Step 3.2 (main.c)
+	
+		- the returned values of the "dict_get" function (07-file) will be stored in the "direct" pointer. 
+		- the "direct" (contains the value for the key) will be passed into the "print_str" function (01-file).
+		- the "print_str" function (01-file) will print the value characters.
+		- Also under inside the "if(direct)", it prints new line and free the memory of the struct "dict" by the funtion "free_dict" (14-file)
+		- If the "strcmp != 0", the program will proceed to Step 4.
+
+STEP 4. FOCUS ON "is_zero" function (this function is inside the main.c)
+
+	Step 4.1 (main.c)
+	
+		- The "is_zero" function (01-file) checks if there are trailing zeros in the argument.
+		- if there are, then print the value of the single zero only, followed by newline. Then proceed to Step 5.
+
+STEP 5. FOCUS ON "convert_number" function (this function is inside 11-file)
+
+	Step 5.1 (convert_number function)
+
+		- The "convert_number" function (11-file) is called when the number is not found directly in "numbers.dict".
+		- This function convert_number(char *n, t_dict *dict, int size) (i.e. "number string", "structs", "struct size")-consecutively.
+		- The function mentioned converts a numeric string into words using grouped processing.
+		- The function starts by calculating the length of the input number using "ft_strlen".
+		- The return value of the "ft_strlen" will be used to compute how many 3-digit groups are needed using arithmetic grouping logic.
+		- Once the number of groups is identified, it will be stored in g variable. then proceed to Step 5.2. 
+		
+	Step 5.2 (get_group function 11-file)
+
+		- The g value will then be use to extract the 3-digit block of the "number argument string".
+		- The g value will then be passed to the static "get_group" function (11-file).
+		- This function takes "get_group(char *n, char *buf, int g)" (i.e. "number argument string", "buffer size", g value)-consecutively.
+		- It calculates the correct position inside the string.
+		- It copies up to three digits into the buffer.
+		- If the position is out of range, it fills missing digits with '0'.
+		- It ensures every group is always normalized to 3 digits.
+
+	Step 5.3 (main loop inside convert_number in 11_convert_large.c)
+
+		- The function enters a loop controlled by the group counter.
+		- For each iteration, it calls get_group to extract the current block.
+		- It then sends the group to convert_hundreds (10_convert_hundreds.c).
+		- After that, it calls handle_tens (also in 10_convert_hundreds.c).
+		- These two functions convert the 3-digit group into words using dictionary lookup.
+
+	Step 5.4 (scale handling using print_scale and get_scale_key in 11_convert_large.c)
+
+		- After processing each group, the function checks if a scale is needed.
+		- It uses print_scale (static function inside convert_number file).
+		- The scale word is retrieved using dict_get (07_dictionary_lookup.c).
+		- The key for the scale is generated using get_scale_key (static function in same file).
+		- This determines whether to print thousand, million, billion, etc.
+		- The scale is only printed if the group contains a non-zero value.
+		- This prevents printing unnecessary scale words for empty groups.
+
+	Step 5.5 (dictionary lookup inside dict_get in 07_dictionary_lookup.c)
+
+		- The scale word is validated through dict_get function.
+		- This function compares generated scale keys with dictionary keys.
+		- When a match is found, it returns the corresponding textual value.
+		- This returned value is passed into print_word (12_output.c).
+
+	Step 5.6 (output control using print_word in 12_output.c)
+
+		- The final word output is handled by print_word.
+		- This function prints each character of the word using write.
+		- It ensures clean output formatting for each converted token.
+
+	Step 5.7 (spacing control inside convert_number in 11_convert_large.c)
+
+		- The variable "first" is used to control spacing.
+		- It ensures that spaces are only printed between valid words.
+		- The first printed word does not have a leading space.
+		- All following words are preceded by a space.
+
+	Step 5.8 (loop completion inside convert_number in 11_convert_large.c)
+
+		- The loop continues until all groups are processed from highest to lowest.
+		- Each group is independently converted and printed.
+		- After finishing all groups, a newline is printed using write.
+
+	Step 5.9 (function termination in convert_number in 11_convert_large.c)
+
+		- The function returns success after completing the full conversion.
+		- Control returns back to main.c after execution.
+
+STEP 6. FINAL OUTPUT FLOW (main.c)
+
+	Step 6.1 
+
+		- If dict_get succeeds, output is printed immediately using print_str (12_output.c).
+		- If input is zero, is_zero in main.c handles it separately.
+		- Otherwise, convert_number in 11_convert_large.c handles full conversion.
+		- All outputs end with a newline and proper memory cleanup using free_dict (14_fre
+
